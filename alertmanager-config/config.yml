@@ -1,0 +1,34 @@
+global:
+  # 邮件smtp配置
+  smtp_smarthost: 'smtp.126.com:25' # SMTP服务器地址和端口
+  smtp_from: 'test@126.com'
+  smtp_auth_username: 'test@126.com'
+
+route:
+  group_by: ['alertname']
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 30m
+  receiver: dingding_and_email
+  routes:
+  - receiver: wechat
+    continue: true
+  - receiver: email
+  #- receiver: phone #需要对接短信接口
+
+receivers:
+- name: 'wechat'
+  wechat_configs:
+  - send_resolved: true
+    to_party: '1'
+    agent_id: '1000002'
+    corp_id: 'corpabc'
+    api_secret: 'abcd1234'
+    api_url: 'https://qyapi.weixin.qq.com/cgi-bin/'
+- name: email
+  email_configs:
+  - to: 'name1@sany.com.cn,name2@sany.com.cn'
+    send_resolved: true
+
+templates:
+- '*.tmpl'
